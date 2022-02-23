@@ -1,6 +1,6 @@
 FROM php:8.1-cli
 
-VOLUME [ "/app", "/root/.ssh" ]
+VOLUME [ "/app", "/ssh" ]
 WORKDIR /app
 
 # install system deps
@@ -29,8 +29,10 @@ RUN cd /tmp && rm -rf phpiredis && git clone https://github.com/nrk/phpiredis.gi
 # composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+RUN mkdir /root/.ssh
+
 # configure limits
 RUN echo 'memory_limit=-1' > /usr/local/etc/php/conf.d/memory_limit.ini
 
 # run
-ENTRYPOINT [ "composer", "install", "-n" ]
+ENTRYPOINT cp /ssh/* /root/.ssh/ && chown root:root /root/.ssh && chmod -R 600 /root/.ssh && chmod +x /root/.ssh && ls /root/.ssh && composer install -n
