@@ -5,7 +5,7 @@ WORKDIR /app
 
 # install system deps
 RUN apt-get update \
-    && apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev libpng-dev zlib1g-dev libicu-dev g++ libxml2-dev git zip wget ca-certificates libhiredis-dev supervisor libmpdec-dev sudo libgmp-dev libzip-dev
+    && apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev libpng-dev zlib1g-dev libicu-dev g++ libxml2-dev git zip wget ca-certificates libhiredis-dev supervisor libmpdec-dev sudo libgmp-dev libzip-dev libssh2-1-dev
 
 # install lib deps
 RUN docker-php-ext-configure opcache && docker-php-ext-install opcache
@@ -21,6 +21,7 @@ RUN docker-php-ext-configure sockets && docker-php-ext-install sockets
 
 # install pecl deps
 RUN pecl install decimal && docker-php-ext-enable decimal
+RUN pecl install ssh2-1.3.1 && docker-php-ext-enable ssh2
 RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install igbinary && docker-php-ext-enable igbinary
 RUN pecl install mongodb && docker-php-ext-enable mongodb
